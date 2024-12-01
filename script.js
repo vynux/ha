@@ -83,6 +83,29 @@ let config = {
     SUNRAYS_RESOLUTION: 196,
     SUNRAYS_WEIGHT: 1.0,
 }
+function loadFluidPreset() {
+    fetch('./Woah.fluid')
+        .then(response => response.arrayBuffer())
+        .then(buffer => {
+            const presetData = new Uint8Array(buffer);
+            applyFluidPreset(presetData);
+        })
+        .catch(error => console.error('Error loading fluid preset:', error));
+}
+
+function applyFluidPreset(presetData) {
+    // Hier interpretierst du die Preset-Daten
+    console.log('Preset loaded:', presetData);
+
+    // Beispiel: Einstellungen aus Preset-Daten
+    config.BACK_COLOR = { r: presetData[0], g: presetData[1], b: presetData[2] }; // Fallback: RGB-Werte
+    config.CURL = presetData[3] / 10; // Fallback für Wirbelstärke
+    config.SPLAT_FORCE = presetData[4] * 1000; // Fallback für Splats
+    console.log('Preset applied to config:', config);
+}
+
+// Automatisches Laden des Presets beim Start
+loadFluidPreset();
 
 function pointerPrototype () {
     this.id = -1;
